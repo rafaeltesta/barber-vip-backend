@@ -26,7 +26,25 @@ class AgendamentoController extends Controller
      */
     public function create()
     {
-        //
+        try {
+            $barbeiro = Barbeiro::where('user_id', auth()->id);
+            $agendamento = new Agendamento();
+            $agendamento->barber_id = $barbeiro->id;
+            $agendamento->cliente_id = null;
+            $agendamento->servico = request('servico');
+            $agendamento->preco = request('preco');
+            $agendamento->data = request('data');
+            $agendamento->save();
+
+            
+            return response()->json([
+                'response' => 'Horario criado com sucesso!',
+                'agendamento' => $agendamento
+            ], 201);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return response()->json('Ocorreu algum problema ao criar o agendamento!', 400);
+        }
     }
 
     /**

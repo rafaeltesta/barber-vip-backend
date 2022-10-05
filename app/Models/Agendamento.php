@@ -12,7 +12,7 @@ class Agendamento extends Model
     protected $table = 'agendamentos';
 
     protected $fillable = [
-        'barber_id', 'cliente_id'
+        'barber_id', 'cliente_id', 'servico', 'preco'
     ];
 
     protected $date = [

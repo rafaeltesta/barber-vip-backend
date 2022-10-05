@@ -64,18 +64,6 @@ class AgendamentoController extends Controller
     {
         //
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Agendamento  $agendamento
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Agendamento $agendamento)
-    {
-        //
-    }
-
     /**
      * Update the specified resource in storage.
      *
@@ -85,7 +73,22 @@ class AgendamentoController extends Controller
      */
     public function update(Request $request, Agendamento $agendamento)
     {
-        //
+        try {
+            $cliente = auth()->id;
+            $barbeiro = $request->barbeiro;
+            $data = $request->data;
+
+            $agendamento->data = $data;
+            $agendamento->save();
+
+            return response()->json([
+                'response' => 'Horario alterado com sucesso!',
+                'agendamento' => $agendamento
+            ], 201);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return response()->json('Ocorreu algum problema ao editar o agendamento!', 400);
+        }
     }
 
     /**
@@ -96,6 +99,16 @@ class AgendamentoController extends Controller
      */
     public function destroy(Agendamento $agendamento)
     {
-        //
+        try {
+            $agendamento->delete();
+
+            return response()->json([
+                'response' => 'Agendamento excluido com sucesso!',
+                'agendamento' => $agendamento
+            ], 201);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return response()->json('Ocorreu algum problema ao deletar o agendamento!', 400);
+        }
     }
 }

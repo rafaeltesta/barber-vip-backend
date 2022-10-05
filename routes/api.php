@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\AgendamentoController;
 use App\Http\Controllers\Auth\ApiAuthController;
+use App\Http\Controllers\BarbeiroController;
+use App\Http\Controllers\ClienteController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,9 +18,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//Route::middleware('auth:api')->get('/user', function (Request $request) {
-//    return $request->user();
-//});
-
 Route::get('register', [ApiAuthController::class, 'register']);
 Route::get('login', [ApiAuthController::class, 'login']);
+
+Route::middleware(['auth:api-clientes', /*'check.status'*/])->group(function () {
+    Route::apiResources('agendamento', [AgendamentoController::class]);
+    Route::apiResources('cliente', [ClienteController::class]);
+});
+
+Route::middleware(['auth:api-barbeiros', /*'check.status'*/])->group(function () {
+    Route::apiResources('agendamento', [AgendamentoController::class]);
+    Route::apiResources('barbeiro', [BarbeiroController::class]);
+});
